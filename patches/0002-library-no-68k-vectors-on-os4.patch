@@ -1,0 +1,32 @@
+diff --git a/upstream/ahi/Drivers/Common/library.c b/upstream/ahi/Drivers/Common/library.c
+--- a/upstream/ahi/Drivers/Common/library.c
++++ b/upstream/ahi/Drivers/Common/library.c
+@@ -256,7 +256,11 @@ static const CONST_APTR Interfaces[] = {
+     NULL
+ };
+ 
+-/* m68k library vectors */
++/* m68k library vectors. Not built for AmigaOS 4 here: sfdc's AmigaOS 4
++ * gate class makes no 68k trampolines, and ahi.device calls a driver
++ * through its "main" interface (Device/audioctrl.c, GetInterface), so a
++ * driver without a 68k vector table serves every native caller. */
++#ifdef AHI_DRIVER_68K_VECTORS
+ static const CONST_APTR VecTable68K[] = {
+     (CONST_APTR) &m68kgwLibOpen,
+     (CONST_APTR) &m68kgwLibClose,
+@@ -281,12 +285,15 @@ static const CONST_APTR VecTable68K[] = {
+ 
+     (CONST_APTR) - 1
+ };
++#endif
+ 
+ /* CreateLibrary() tag list */
+ static const struct TagItem InitTable[] = {
+     { CLT_DataSize,         DRIVERBASE_SIZEOF   },
+     { CLT_Interfaces, (ULONG) Interfaces  },
++#ifdef AHI_DRIVER_68K_VECTORS
+     { CLT_Vector68K, (ULONG) VecTable68K },
++#endif
+     { CLT_InitFunc, (ULONG) gwLibInit   },
+     { TAG_DONE,             0                   }
+ };

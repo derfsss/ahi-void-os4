@@ -1,0 +1,78 @@
+diff --git a/upstream/ahi/Drivers/Void/void-main.c b/upstream/ahi/Drivers/Void/void-main.c
+--- a/upstream/ahi/Drivers/Void/void-main.c
++++ b/upstream/ahi/Drivers/Void/void-main.c
+@@ -22,6 +22,13 @@
+ 
+ #define dd ((struct VoidData*) AudioCtrl->ahiac_DriverData)
+ 
++#if defined( __AMIGAOS4__ )
++/* A native process entry is handed ExecBase as its third argument; the
++ * slave takes it from there rather than from address 4. */
++void
++SlaveEntry(STRPTR argPtr, ULONG argSize, struct ExecBase *execbase);
++#define slaveentry SlaveEntry
++#else
+ void
+ SlaveEntry(void);
+ 
+@@ -30,6 +37,7 @@ PROCGW(static, void,  slaveentry, SlaveEntry);
+ #else
+ #define slaveentry SlaveEntry
+ #endif
++#endif
+ 
+ /*  There is probably no reason to support all these frequencies. If,
+  *  for example, your hardware is locked at 48 kHz, it's ok to only
+diff --git a/upstream/ahi/Drivers/Void/void-playslave.c b/upstream/ahi/Drivers/Void/void-playslave.c
+--- a/upstream/ahi/Drivers/Void/void-playslave.c
++++ b/upstream/ahi/Drivers/Void/void-playslave.c
+@@ -34,6 +34,14 @@ AROS_UFH3(void, SlaveEntry,
+     AROS_USERFUNC_EXIT
+ }
+ 
++#elif defined( __AMIGAOS4__ )
++/* A native process entry is handed ExecBase as its third argument. */
++void SlaveEntry(STRPTR argPtr, ULONG argSize, struct ExecBase *SysBase)
++{
++    (void) argPtr;
++    (void) argSize;
++    Slave(SysBase);
++}
+ #else
+ 
+ void SlaveEntry(void)
+@@ -52,6 +60,10 @@ Slave(struct ExecBase *SysBase)
+     struct MsgPort         *timerport;
+     struct timerequest     *timereq = NULL;
+     struct Device          *TimerBase = NULL;
++#if defined( __AMIGAOS4__ )
++    // ReadEClock is called through timer.device's interface here
++    struct TimerIFace      *ITimer = NULL;
++#endif
+     struct EClockVal        ev;
+     UQUAD                   deadline, now, rem = 0, delay;
+     ULONG                   efreq;
+@@ -73,6 +85,13 @@ Slave(struct ExecBase *SysBase)
+     if(timereq != NULL &&
+        OpenDevice(TIMERNAME, UNIT_MICROHZ, (struct IORequest *) timereq, 0) == 0) {
+         TimerBase = timereq->tr_node.io_Device;
++#if defined( __AMIGAOS4__ )
++        ITimer = (struct TimerIFace *) GetInterface((struct Library *) TimerBase, "main", 1, NULL);
++        if(ITimer == NULL) {
++            CloseDevice((struct IORequest *) timereq);
++            TimerBase = NULL;
++        }
++#endif
+     }
+ 
+     if(dd->slavesignal != -1 && TimerBase != NULL) {
+@@ -122,6 +141,9 @@ Slave(struct ExecBase *SysBase)
+     }
+ 
+     if(TimerBase != NULL) {
++#if defined( __AMIGAOS4__ )
++        DropInterface((struct Interface *) ITimer);
++#endif
+         CloseDevice((struct IORequest *) timereq);
+     }
+     DeleteIORequest((struct IORequest *) timereq);
