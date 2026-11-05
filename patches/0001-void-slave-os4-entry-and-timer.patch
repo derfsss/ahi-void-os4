@@ -26,7 +26,20 @@ diff --git a/upstream/ahi/Drivers/Void/void-main.c b/upstream/ahi/Drivers/Void/v
 diff --git a/upstream/ahi/Drivers/Void/void-playslave.c b/upstream/ahi/Drivers/Void/void-playslave.c
 --- a/upstream/ahi/Drivers/Void/void-playslave.c
 +++ b/upstream/ahi/Drivers/Void/void-playslave.c
-@@ -34,6 +34,14 @@ AROS_UFH3(void, SlaveEntry,
+@@ -17,6 +17,12 @@
+ ******************************************************************************/
+ 
+ #undef SysBase
++#if defined( __AMIGAOS4__ )
++// IExec is AHIsubBase->iexec elsewhere; the slave has no AHIsubBase until
++// it has read its AudioCtrl, so it uses its own, from the ExecBase it was
++// handed.
++#undef IExec
++#endif
+ 
+ void Slave(struct ExecBase *SysBase);
+ 
+@@ -34,6 +40,14 @@ AROS_UFH3(void, SlaveEntry,
      AROS_USERFUNC_EXIT
  }
  
@@ -41,7 +54,15 @@ diff --git a/upstream/ahi/Drivers/Void/void-playslave.c b/upstream/ahi/Drivers/V
  #else
  
  void SlaveEntry(void)
-@@ -52,6 +60,10 @@ Slave(struct ExecBase *SysBase)
+@@ -47,11 +61,18 @@ void SlaveEntry(void)
+ void
+ Slave(struct ExecBase *SysBase)
+ {
++#if defined( __AMIGAOS4__ )
++    struct ExecIFace       *IExec = (struct ExecIFace *) SysBase->MainInterface;
++#endif
+     struct AHIAudioCtrlDrv *AudioCtrl;
+     struct DriverBase      *AHIsubBase;
      struct MsgPort         *timerport;
      struct timerequest     *timereq = NULL;
      struct Device          *TimerBase = NULL;
@@ -52,7 +73,7 @@ diff --git a/upstream/ahi/Drivers/Void/void-playslave.c b/upstream/ahi/Drivers/V
      struct EClockVal        ev;
      UQUAD                   deadline, now, rem = 0, delay;
      ULONG                   efreq;
-@@ -73,6 +85,13 @@ Slave(struct ExecBase *SysBase)
+@@ -73,6 +94,13 @@ Slave(struct ExecBase *SysBase)
      if(timereq != NULL &&
         OpenDevice(TIMERNAME, UNIT_MICROHZ, (struct IORequest *) timereq, 0) == 0) {
          TimerBase = timereq->tr_node.io_Device;
@@ -66,7 +87,7 @@ diff --git a/upstream/ahi/Drivers/Void/void-playslave.c b/upstream/ahi/Drivers/V
      }
  
      if(dd->slavesignal != -1 && TimerBase != NULL) {
-@@ -122,6 +141,9 @@ Slave(struct ExecBase *SysBase)
+@@ -122,6 +150,9 @@ Slave(struct ExecBase *SysBase)
      }
  
      if(TimerBase != NULL) {

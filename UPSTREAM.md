@@ -24,7 +24,7 @@ with no wait.
 
 | patch | what | why it is not upstream |
 |---|---|---|
-| `0001-void-slave-os4-entry-and-timer.patch` | `Drivers/Void`: on AmigaOS 4 the slave process takes ExecBase from its entry's third argument instead of address 4, and gets timer.device's `main` interface for `ReadEClock` | the AmigaOS 4 arm predates the pacing, which added the timer; upstream's arm reads address 4 |
+| `0001-void-slave-os4-entry-and-timer.patch` | `Drivers/Void`: on AmigaOS 4 the slave process takes ExecBase from its entry's third argument instead of address 4, uses its own `IExec` from it (the shared `IExec` macro reads `AHIsubBase`, which the slave has not found yet), and gets timer.device's `main` interface for `ReadEClock` | the AmigaOS 4 arm predates the pacing, which added the timer; upstream's arm reads address 4 |
 | `0002-library-no-68k-vectors-on-os4.patch` | `Drivers/Common/library.c`: the 68k vector table is built only under `AHI_DRIVER_68K_VECTORS` | sfdc's AmigaOS 4 gate class makes no 68k trampolines, and `ahi.device` calls a driver through its `main` interface (`Device/audioctrl.c`, `GetInterface`) |
 
 Both are candidates to offer back to AROS.
