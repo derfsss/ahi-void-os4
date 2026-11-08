@@ -6,8 +6,8 @@ here.
 ## AHI
 
 **Martin Blom** wrote AHI, the Amiga audio system, including the driver interface and the
-do-nothing example driver this project is built from. AHI is at
-<http://www.lysator.liu.se/ahi/>.
+do-nothing example driver this project is built from. The AHI sources used here are in
+[AROS's copy of AHI](https://github.com/aros-development-team/AROS/tree/master/workbench/devs/AHI).
 
 ## AROS
 
