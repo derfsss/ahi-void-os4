@@ -56,9 +56,10 @@ nothing else installed: no Amiga SDK and no cross compiler. It uses the image
 **Windows (PowerShell):**
 
 ```
-.\make.ps1               buildoid.audio and build\VOID
+.\make.ps1               build\void.audio and build\VOID
 .\make.ps1 check         the gates (see below)
-.\make.ps1 deployables   stripped files in build\deploy\n```
+.\make.ps1 deployables   stripped files in build\deploy\
+```
 
 **Linux, macOS, or bash on Windows (Git Bash, MSYS2):**
 
