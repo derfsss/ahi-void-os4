@@ -5,8 +5,17 @@ here.
 
 ## AHI
 
-**Martin Blom** wrote AHI, the Amiga audio system, including the driver interface and the
-do-nothing example driver this project is built from. The AHI sources used here are in
+**Martin Blom** ("Leviticus") wrote AHI, the Amiga audio system, including the driver
+interface and the do-nothing example driver this project is built from. The attribution is in
+the sources themselves:
+
+- `Include/SFD/ahi_lib.sfd` and `ahi_sub_lib.sfd`: "Copyright © 1994-2005 Martin Blom".
+- `Drivers/Void/void-main.c`: the driver reports its author as "Martin 'Leviticus' Blom" and
+  its copyright as "Public Domain".
+- AROS's AHI `ChangeLog`: Martin Blom's entries run to "Released AHI 6.0" on 2005-11-20.
+  Some of the changes in that log credit others, for example Gunther Nikl and Ian Greenway.
+
+The AHI sources used here are in
 [AROS's copy of AHI](https://github.com/aros-development-team/AROS/tree/master/workbench/devs/AHI).
 
 ## AROS

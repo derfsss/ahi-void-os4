@@ -76,7 +76,8 @@ because Docker runs as root; `sudo chown -R "$USER" build` fixes that.
 
 ## Credits and licence
 
-See `CREDITS.md` for who wrote what. AHI's drivers are under the LGPL with the exception in
-`COPYING.DRIVERS`: a driver may carry any licence. sfdc is under its own `COPYING` (GPL). This
+See `CREDITS.md` for who wrote what. AHI is under the LGPL, with the exception in
+`COPYING.DRIVERS`: a driver may carry any licence. The Void driver's source reports its own
+copyright as "Public Domain". sfdc is under its own `COPYING` (GPL). This
 repository's own files (`Makefile`, `make.ps1`, `make.sh`, `src/`, `patches/`) are MIT, see
 `LICENSE`.

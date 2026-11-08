@@ -31,5 +31,6 @@ Both are candidates to offer back to AROS.
 
 ## Licence
 
-AHI's drivers are under the LGPL with the exception in `COPYING.DRIVERS`: a driver may carry
-any licence. sfdc is under its own `COPYING` (GPL). This repository's own files are MIT.
+AHI is under the LGPL, with the exception in `COPYING.DRIVERS`: a driver may carry any
+licence. The Void driver's source reports its own copyright as "Public Domain" (`AHIDB_Copyright`
+in `void-main.c`). sfdc is under its own `COPYING` (GPL). This repository's own files are MIT.
