@@ -7,7 +7,8 @@
 # would (AROS #1882), so a program's sound thread blocks at the real rate on
 # a machine with no sound card.
 #
-# Run through make.ps1, inside the cross image; never the host's make.
+# Run through make.ps1 (Windows) or make.sh (Linux, macOS, bash), inside the
+# cross image; never the host's make.
 #
 #   make               void.audio and VOID into build/
 #   make check         the gates (upstream identity, patch applies, no
