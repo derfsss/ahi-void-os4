@@ -7,9 +7,12 @@ The driver accepts the sound, discards it, and takes as long as playing it would
 paced by `timer.device`. A program's sound thread therefore blocks at the real rate, as it
 would with a card. Without a working unit, a program whose sound thread retries a failed
 write spins and starves everything at a lower priority. Super Star Blast's loading screen did
-this on an X5000 with no sound card (derfsss/Mesa-os4#445).
+this on an X5000 with no sound card.
 
 It is AROS's AHI Void driver (`UPSTREAM.md`), built native for PowerPC with two small patches.
+
+**Status: beta.** Tested on an AmigaOS 4 X5000 (Super Star Blast loads to its menu with every
+AHI unit set to VOID). Reports from other machines are welcome as GitHub issues.
 
 ## Build
 
